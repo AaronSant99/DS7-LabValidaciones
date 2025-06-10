@@ -15,7 +15,8 @@ class FormValidator {
     public function validate() {
         // Common validation rules
         $this->validateRequiredFields();
-        $this->validateEmailFormat();
+        $this->validarFormatoCorreo();
+        $this->validarFormatoTelefono();
         // Add more validation methods as needed
     }
 
@@ -28,14 +29,20 @@ class FormValidator {
         }
     }
 
-    private function validateEmailFormat() {
+    private function validarFormatoCorreo() {
         // Check if email field is in a valid format
-        if (!filter_var($this->data['email'], FILTER_VALIDATE_EMAIL)) {
-            throw new Exception("Invalid email format.");
+        if (!filter_var($this->data['correo'], FILTER_VALIDATE_EMAIL)) {
+            throw new Exception("Formato de Correo Invalido.");
         }
     }
 
-    // Define other validation methods...
+    private function validarFormatoTelefono() {
+    // Valida el formato 123-456-7890
+        if (!preg_match('/^\d{3}-\d{3}-\d{4}$/', $this->data['telefono'])) {
+            throw new Exception("Formato de Teléfono inválido. Debe ser por ejemplo: 123-456-7890.");
+        }
+    }
+
 }
 
 

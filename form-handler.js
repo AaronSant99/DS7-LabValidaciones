@@ -1,36 +1,44 @@
 const form = document.getElementById('contactForm');
 
-//escuchando el evento Submit
 form.addEventListener('submit', function(event) {
-    //detengo el envío del formulario
     event.preventDefault();
-    //Al usar event.preventDefault();
-    //detienes ese comportamiento automático, lo que te permite:
-    //Capturar los datos del formulario manualmente.
-    //enviarlos tú mismo
-    //Mostrar resultados sin recargar la página.
 
-  const formData = new FormData(form);
-    //FormData: se usa para recoger todos los
-    //de un formulario HTML y prepararlos para el envío
-    //con fetch
+    const email = form.email.value.trim();
+    const telefono = form.telephone.value.trim();
+    const errorDiv = document.getElementById('response');
+    const telefonoRegex = /^\d{3}-\d{3}-\d{4}$/;
 
-  fetch(form.action, {
-    method: 'POST',
-    body: formData
-  })
-  //then que maneja la repuesta del servidor 
-  //después de enviar el formulario con fetch
-  //=>response.text() convierte la respuesta 
-  //servidor en texto plano
-  //.then(data=>{ recibe el texto procesado})
-  //Luego inserta ese texto dentro del 
-  //elemento con id response en el HTML
-  .then(response => response.text())
-  .then(data => {
-    document.getElementById('response').innerHTML = data;
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
+    // Validación de email
+    if (!validateEmail(email)) {
+        errorDiv.innerHTML = "Invalid email format";
+        return;
+    }
+
+    // Validación de teléfono
+    if (!telefonoRegex.test(telefono)) {
+        errorDiv.innerHTML = 
+            "Formato de Teléfono inválido. Debe ser por ejemplo: 123-456-7890.";
+        return;
+    }
+
+    errorDiv.innerHTML = "";
+
+    const formData = new FormData(form);
+
+    fetch(form.action, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+        errorDiv.innerHTML = data;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
 });
+
+function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
