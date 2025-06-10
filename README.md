@@ -27,18 +27,18 @@ En este laboratorio, el estudiante replica una solución funcional de validació
 
 En validate.php (lado servidor):
 
-    1. Se valida el campo nombre: solo permite letras y espacios en blanco.
-    2. Se valida el campo email: debe tener formato de correo electrónico válido.
-    3. Se valida el campo teléfono: debe tener el formato 123-456-7890 (usando preg_match).
-    4. Se valida el campo CAPTCHA: el código ingresado debe coincidir con el generado y guardado en sesión.
+   1. Se valida el campo nombre: solo permite letras y espacios en blanco.
+   2. Se valida el campo email: debe tener formato de correo electrónico válido.
+   3. Se valida el campo teléfono: debe tener el formato 123-456-7890 (usando preg_match).
+   4. Se valida el campo CAPTCHA: el código ingresado debe coincidir con el generado y guardado en sesión.
 
 En form-handler.js (lado cliente):
 
-    1. Se valida el campo nombre: solo permite letras y espacios.
-    2. Se valida el campo email: debe tener formato de correo electrónico válido.
-    3. Se valida el campo teléfono: debe tener el formato 123-456-7890.
-    4. Se valida que el campo captcha no esté vacío.
-    5. Todos los errores detectados en el cliente se muestran juntos antes de enviar el formulario.
+   1. Se valida el campo nombre: solo permite letras y espacios.
+   2. Se valida el campo email: debe tener formato de correo electrónico válido.
+   3. Se valida el campo teléfono: debe tener el formato 123-456-7890.
+   4. Se valida que el campo captcha no esté vacío.
+   5. Todos los errores detectados en el cliente se muestran juntos antes de enviar el formulario.
 
 #### ¿Qué pasa si no se valida bien?
 
