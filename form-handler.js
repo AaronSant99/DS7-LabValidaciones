@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (errorMsgList.length > 0) {
             document.getElementById('errors').innerHTML = errorMsgList.join('<br>');
+            document.getElementById('response').innerHTML = "";
             return;
         }
 
@@ -42,21 +43,20 @@ document.addEventListener('DOMContentLoaded', function() {
             const result = await response.json();
 
             if (!result.success) {
-                // Si errors es array, únelos con salto de línea
                 if (Array.isArray(result.errors)) {
                     document.getElementById('errors').innerHTML = result.errors.join('<br>');
                 } else {
                     document.getElementById('errors').innerHTML = result.errors || "Ocurrió un error desconocido.";
                 }
+                document.getElementById('response').innerHTML = "";
             } else {
                 document.getElementById('errors').innerHTML = "";
-                // Aquí puedes mostrar un mensaje de éxito o limpiar el formulario si lo deseas.
-                // Por ejemplo:
-                // form.reset();
-                // document.getElementById('response').innerText = "¡Registro exitoso!";
+                document.getElementById('response').innerHTML = "¡Registro exitoso!";
+                form.reset();
             }
         } catch (err) {
             document.getElementById('errors').innerHTML = "Error de conexión con el servidor.";
+            document.getElementById('response').innerHTML = "";
         }
     });
 });
