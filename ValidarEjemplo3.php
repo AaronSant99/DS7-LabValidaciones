@@ -43,9 +43,10 @@
             
             <button type="submit" class="btn">Registrar</button>
         </form>
+        <div id="response"></div>
+        <div id="errors"></div>
     </div>    
-<div id="response"></div>
-<div id="errors"></div>
+
 <script src="form-handler.js" defer></script>
 </body>
 </html>
