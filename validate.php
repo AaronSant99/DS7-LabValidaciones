@@ -1,10 +1,12 @@
 <?php
 session_start();
 
+header('Content-Type: application/json');
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $errors = [];
 
-    // Validar Name
+    // Validar Nombre
     $name = test_input($_POST["name"] ?? '');
     if (!preg_match("/^[a-zA-Z ]*$/", $name)) {
         $errors[] = "Solo letras y espacios en blanco permitidos en el nombre.";
@@ -13,13 +15,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Validar Email
     $email = test_input($_POST["email"] ?? '');
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = "Formato de Correo Invalido.";
+        $errors[] = "Formato de Correo Inválido.";
     }
 
-    // Validar Telephone
+    // Validar Teléfono
     $telephone = test_input($_POST["telephone"] ?? '');
-    if (!preg_match("/^\d{3}[-\s]?\d{3}[-\s]?\d{4}$/", $telephone)) {
-        $errors[] = "Formato de Teléfono inválido. Debe ser por ejemplo: 123-456-7890.";
+    if (!preg_match("/^\d{3}-\d{3}-\d{4}$/", $telephone)) {
+        $errors[] = "Formato de Teléfono inválido. Ejemplo de Formato Valido: 123-456-7890.";
     }
 
     // Validar CAPTCHA
@@ -29,16 +31,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $errors[] = "El código CAPTCHA es incorrecto.";
     }
 
-    // Mostrar errores o éxito en el div correspondiente
     if (!empty($errors)) {
-        echo '<div id="errors" style="color: red;">';
-        foreach ($errors as $error) {
-            echo $error . "<br>";
-        }
-        echo '</div>';
+        echo json_encode(['success' => false, 'errors' => $errors]);
     } else {
-        echo '<div id="errors" style="color: green;">Form submitted successfully</div>';
+        echo json_encode(['success' => true]);
     }
+    exit;
 }
 
 function test_input($data) {

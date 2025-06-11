@@ -3,41 +3,60 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', async function(event) {
         event.preventDefault();
 
-        let errorMsg = "";
+        let errorMsgList = [];
 
-        // Validación cliente de nombre (opcional)
+        // Validación cliente
         const nombre = form.name.value.trim();
         if (nombre === "" || !/^[a-zA-Z ]+$/.test(nombre)) {
-            errorMsg += "Solo letras y espacios en blanco permitidos en el nombre.<br>";
+            errorMsgList.push("Solo letras y espacios en blanco permitidos en el nombre.");
         }
 
         const email = form.email.value.trim();
         if (email === "" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            errorMsg += "Formato de Correo Invalido.<br>";
+            errorMsgList.push("Formato de Correo Inválido.");
         }
 
         const telefono = form.telephone.value.trim();
         const telefonoRegex = /^\d{3}-\d{3}-\d{4}$/;
         if (!telefonoRegex.test(telefono)) {
-            errorMsg += "Formato de Teléfono inválido. Ejemplo de Formato Valido: 123-456-7890.<br>";
+            errorMsgList.push("Formato de Teléfono inválido. Ejemplo de Formato Valido: 123-456-7890.");
         }
 
         const captcha = form.captcha.value.trim();
         if (captcha === "") {
-            errorMsg += "El código CAPTCHA es obligatorio.<br>";
+            errorMsgList.push("El código CAPTCHA es obligatorio.");
         }
 
-        if (errorMsg) {
-            document.getElementById('errors').innerHTML = errorMsg;
+        if (errorMsgList.length > 0) {
+            document.getElementById('errors').innerHTML = errorMsgList.join('<br>');
             return;
         }
-        // Si no hay errores, enviar el formulario
+
+        // Si no hay errores en cliente, envía al backend
         const formData = new FormData(form);
-        const response = await fetch(form.action, {
-            method: form.method,
-            body: formData,
-        });
-        const result = await response.text();
-        document.getElementById('errors').innerHTML = result;
+        try {
+            const response = await fetch(form.action, {
+                method: form.method,
+                body: formData,
+            });
+            const result = await response.json();
+
+            if (!result.success) {
+                // Si errors es array, únelos con salto de línea
+                if (Array.isArray(result.errors)) {
+                    document.getElementById('errors').innerHTML = result.errors.join('<br>');
+                } else {
+                    document.getElementById('errors').innerHTML = result.errors || "Ocurrió un error desconocido.";
+                }
+            } else {
+                document.getElementById('errors').innerHTML = "";
+                // Aquí puedes mostrar un mensaje de éxito o limpiar el formulario si lo deseas.
+                // Por ejemplo:
+                // form.reset();
+                // document.getElementById('response').innerText = "¡Registro exitoso!";
+            }
+        } catch (err) {
+            document.getElementById('errors').innerHTML = "Error de conexión con el servidor.";
+        }
     });
 });
